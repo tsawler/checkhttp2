@@ -7,7 +7,6 @@ import (
 )
 
 func main() {
-
 	url := "https://" + os.Args[1];
 	resp, err := http.Get(url)
 	if err != nil {
