@@ -19,5 +19,4 @@ func main() {
 			fmt.Println("OK- " + os.Args[1] + " responded with " + resp.Status)
 		}
 	}
-
 }
