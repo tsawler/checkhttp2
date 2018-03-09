@@ -79,11 +79,11 @@ func ExitWithStatus(status *NagiosStatus) {
 func main() {
 
 	hostPtr := flag.String("host", "somedomain.com", "A valid internet site without http:// or https://")
-	protocolPtr := flag.String("protocol", "https://", "Protocol - either https or http")
+	protocolPtr := flag.String("protocol", "https", "Protocol - either https or http")
 
 	flag.Parse()
 
-	url := *protocolPtr + *hostPtr
+	url := *protocolPtr + "://" +  *hostPtr
 
 	resp, err := http.Get(url)
 
