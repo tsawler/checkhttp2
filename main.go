@@ -74,23 +74,24 @@ func ExitWithStatus(status *NagiosStatus) {
 	os.Exit(int(status.Value))
 }
 
-// main expects 1 or two flags: -host <somehost.com> [-protocol http|https]
+// main expects 1 - 3 flags: -host <somehost.com> [-protocol http|https] [-port 80|443|xxx]
 func main() {
 
 	start := time.Now()
 
 	hostPtr := flag.String("host", "unset", "A valid internet site without http:// or https://")
 	protocolPtr := flag.String("protocol", "https", "Protocol - either https or http")
+	portPtr := flag.String("port", "443", "Port number - default 443")
 
 	flag.Parse()
 
 	if strings.Compare(*hostPtr, "unset") == 0 {
-		fmt.Println("Usage: checkHttp2 -host somehost.com [ -protocol http|https]")
+		fmt.Println("Usage: checkhttp2 -host somehost.com [ -protocol http|https] [-port 80|443|xxx]")
 		os.Exit(0)
 	}
 
 	// build url
-	url := *protocolPtr + "://" + *hostPtr
+	url := *protocolPtr + "://" + *hostPtr + ":" + *portPtr
 
 	// call url
 	resp, err := http.Get(url)
