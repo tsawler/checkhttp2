@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"flag"
 	"os"
+	"strings"
 )
 
 type NagiosStatusVal int
@@ -78,25 +79,34 @@ func ExitWithStatus(status *NagiosStatus) {
 // Critical and the status if it's anything else.
 func main() {
 
-	hostPtr := flag.String("host", "somedomain.com", "A valid internet site without http:// or https://")
+	hostPtr := flag.String("host", "unset", "A valid internet site without http:// or https://")
 	protocolPtr := flag.String("protocol", "https", "Protocol - either https or http")
 
 	flag.Parse()
+
+	if strings.Compare(*hostPtr, "unset") == 0 {
+		fmt.Println("Usage: checkHttp2 -host somehost.com [ -protocol http|https]")
+		os.Exit(0)
+	}
 
 	url := *protocolPtr + "://" +  *hostPtr
 
 	resp, err := http.Get(url)
 
 	if err != nil {
-		msg := "CRITICAL- host did not respond"
+		msg := "Host did not respond"
 		Critical(msg)
 
 	} else {
+		if resp.StatusCode == 503 {
+			msg := *hostPtr + " " + resp.Proto + " " + resp.Status
+			Warning(msg)
+		}
 		if resp.StatusCode != 200 {
-			msg := "CRITICAL- " + *hostPtr + " " + resp.Proto + " " + resp.Status
+			msg := *hostPtr + " " + resp.Proto + " " + resp.Status
 			Critical(msg)
 		} else {
-			msg := "OK- " + *hostPtr + " responded with " + resp.Proto + " " + resp.Status
+			msg := *hostPtr + " responded with " + resp.Proto + " " + resp.Status
 			Ok(msg)
 		}
 	}
