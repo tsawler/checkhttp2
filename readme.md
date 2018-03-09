@@ -23,7 +23,7 @@ Add this to `/usr/local/nagios/objects/commands.cfg`:
 ~~~
 define command {
    command_name    check_http2
-   command_line    /usr/local/nagios/libexec/checkHttp2 -host $ARG1$
+   command_line    /usr/local/nagios/libexec/checkhttp2 -host $ARG1$
 }
 ~~~
 
