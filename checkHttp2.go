@@ -14,7 +14,8 @@ import (
 // Critical and the status if it's anything else.
 func main() {
 
-	url := "https://" + os.Args[1];
+	url := "https://" + os.Args[1]
+
 	resp, err := http.Get(url)
 
 	if err != nil {
