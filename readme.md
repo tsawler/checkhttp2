@@ -1,10 +1,10 @@
-# checkHttp2
+# checkhttp2
 
 A simple plugin to check https urls, including http/2.
 
 Used with [Nagios](https://www.nagios.org/).
 
-Compile for Digital Ocean: `env GOOS=linux GOARCH=amd64 go build -o checkHttp2 main.go`
+Compile for Digital Ocean: `env GOOS=linux GOARCH=amd64 go build -o checkhttp2 main.go`
 
 ## Usage
 
@@ -13,7 +13,7 @@ these instructions](https://www.digitalocean.com/community/tutorials/how-to-inst
 just place in `/usr/local/nagios/libexec`, and make sure the file is executable.
 
 ~~~
-checkHttp2 -host <hostname.com> -protocol [<http:// or https:// (default)>]
+checkhttp2 -host <hostname.com> -protocol [<http:// or https:// (default)>]
 ~~~
 
 
