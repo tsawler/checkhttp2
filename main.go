@@ -10,12 +10,13 @@ import (
 	"os"
 	"strings"
 	"github.com/pkg/errors"
+	"time"
 )
 
 type NagiosStatusVal int
 
 const (
-	NAGIOS_OK NagiosStatusVal = iota
+	NAGIOS_OK       NagiosStatusVal = iota
 	NAGIOS_WARNING
 	NAGIOS_CRITICAL
 	NAGIOS_UNKNOWN
@@ -36,7 +37,6 @@ type NagiosStatus struct {
 	Message string
 	Value   NagiosStatusVal
 }
-
 
 func (status *NagiosStatus) Aggregate(otherStatuses []*NagiosStatus) {
 	for _, s := range otherStatuses {
@@ -80,6 +80,8 @@ func ExitWithStatus(status *NagiosStatus) {
 // Critical and the status if it's anything else.
 func main() {
 
+	start := time.Now()
+
 	hostPtr := flag.String("host", "unset", "A valid internet site without http:// or https://")
 	protocolPtr := flag.String("protocol", "https", "Protocol - either https or http")
 
@@ -90,9 +92,24 @@ func main() {
 		os.Exit(0)
 	}
 
-	url := *protocolPtr + "://" +  *hostPtr
+	// build url
+	url := *protocolPtr + "://" + *hostPtr
 
+	// call url
 	resp, err := http.Get(url)
+
+
+	// measure TTFB
+	defer resp.Body.Close()
+
+	oneByte := make([]byte,1)
+	_, err = resp.Body.Read(oneByte)
+
+	if err != nil {
+		Critical(err)
+	}
+
+	firstByte := time.Since(start)
 
 	if err != nil {
 		Critical(err)
@@ -107,7 +124,7 @@ func main() {
 			err = errors.New(msg)
 			Critical(err)
 		} else {
-			msg := *hostPtr + " responded with " + resp.Proto + " " + resp.Status
+			msg := *hostPtr + " responded with " + resp.Proto + " " + resp.Status + " in " + firstByte.String()
 			Ok(msg)
 		}
 	}
