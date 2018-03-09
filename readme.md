@@ -13,7 +13,7 @@ these instructions](https://www.digitalocean.com/community/tutorials/how-to-inst
 just place in `/usr/local/nagios/libexec`, and make sure the file is executable.
 
 ~~~
-checkhttp2 -host <hostname.com> -protocol [<http:// or https:// (default)>]
+checkhttp2 -host <hostname.com> -protocol [<http:// or https:// (default)>] [-port 80|443 (default)|xxx ]
 ~~~
 
 
