@@ -22,7 +22,7 @@ func main() {
 		fmt.Println("CRITICAL- site is unreachable!")
 	} else {
 		if resp.StatusCode != 200 {
-			fmt.Println("CRITICAL- " + os.Args[1] + " " + resp.Status + " " + resp.Proto)
+			fmt.Println("CRITICAL- " + os.Args[1] + " " + resp.Proto + " " + resp.Status)
 		} else {
 			fmt.Println("OK- " + os.Args[1] + " responded with " + resp.Proto + " " + resp.Status)
 		}
