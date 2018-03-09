@@ -13,10 +13,9 @@ these instructions](https://www.digitalocean.com/community/tutorials/how-to-inst
 just place in `/usr/local/nagios/libexec`, and make sure the file is executable.
 
 ~~~
-checkHttp2 <url>
+checkHttp2 -host <hostname.com> -protocol [<http:// or https:// (default)>]
 ~~~
 
-Note that https:// is added to the URL automatically, *so don't include it*.
 
 
 Add this to `/usr/local/nagios/objects/commands.cfg`:
@@ -24,7 +23,7 @@ Add this to `/usr/local/nagios/objects/commands.cfg`:
 ~~~
 define command {
    command_name    check_http2
-   command_line    /usr/local/nagios/libexec/checkHttp2 $ARG1$
+   command_line    /usr/local/nagios/libexec/checkHttp2 -host $ARG1$
 }
 ~~~
 
