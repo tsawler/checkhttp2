@@ -32,8 +32,7 @@ var (
 	}
 )
 
-// Take a bunch of NagiosStatus pointers and find the highest value, then
-// combine all the messages. Things win in the order of highest to lowest.
+// Find the highest value and combine all the messages. Things win in the order of highest to lowest.
 type NagiosStatus struct {
 	Message string
 	Value   NagiosStatusVal
@@ -76,9 +75,7 @@ func ExitWithStatus(status *NagiosStatus) {
 }
 
 
-// main expects one parameter on the command line: a valid website name.
-// This host is called using https, and returns OK and the status if the status is 200, or
-// Critical and the status if it's anything else.
+// main expects 1 or two flags: -host <somehost.com> [-protocol http|https]
 func main() {
 
 	start := time.Now()
