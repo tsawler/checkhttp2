@@ -74,7 +74,6 @@ func ExitWithStatus(status *NagiosStatus) {
 	os.Exit(int(status.Value))
 }
 
-
 // main expects 1 or two flags: -host <somehost.com> [-protocol http|https]
 func main() {
 
@@ -96,13 +95,11 @@ func main() {
 	// call url
 	resp, err := http.Get(url)
 
-
 	// measure TTFB
 	defer resp.Body.Close()
 
-	oneByte := make([]byte,1)
+	oneByte := make([]byte, 1)
 	_, err = resp.Body.Read(oneByte)
-
 
 	if err != nil {
 		Critical(err)
