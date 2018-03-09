@@ -13,7 +13,7 @@ func main() {
 	url := "https://" + os.Args[1];
 	resp, err := http.Get(url)
 	if err != nil {
-		print(err.Error())
+		fmt.Println("CRITICAL- site is unreachable!")
 	} else {
 		if resp.StatusCode != 200 {
 			fmt.Println("CRITICAL- " + os.Args[1] + " " + resp.Status)
