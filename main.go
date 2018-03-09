@@ -9,6 +9,7 @@ import (
 	"flag"
 	"os"
 	"strings"
+	"github.com/pkg/errors"
 )
 
 type NagiosStatusVal int
@@ -53,8 +54,8 @@ func Unknown(output string) {
 }
 
 // Exit with an CRITICAL status and appropriate message
-func Critical(output string) {
-	ExitWithStatus(&NagiosStatus{output, NAGIOS_CRITICAL})
+func Critical(err error) {
+	ExitWithStatus(&NagiosStatus{err.Error(), NAGIOS_CRITICAL})
 }
 
 // Exit with an WARNING status and appropriate message
@@ -94,8 +95,7 @@ func main() {
 	resp, err := http.Get(url)
 
 	if err != nil {
-		msg := "Host did not respond"
-		Critical(msg)
+		Critical(err)
 
 	} else {
 		if resp.StatusCode == 503 {
@@ -104,7 +104,8 @@ func main() {
 		}
 		if resp.StatusCode != 200 {
 			msg := *hostPtr + " " + resp.Proto + " " + resp.Status
-			Critical(msg)
+			err = errors.New(msg)
+			Critical(err)
 		} else {
 			msg := *hostPtr + " responded with " + resp.Proto + " " + resp.Status
 			Ok(msg)
