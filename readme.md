@@ -4,7 +4,7 @@ A simple plugin to check https urls, including http/2.
 
 Used with [Nagios](https://www.nagios.org/).
 
-Compile for Digital Ocean: `env GOOS=linux GOARCH=amd64 go build -o chechHttp2 main.go`
+Compile for Digital Ocean: `env GOOS=linux GOARCH=amd64 go build -o checkHttp2 main.go`
 
 ## Usage
 
