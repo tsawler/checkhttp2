@@ -6,6 +6,9 @@ import (
 	"net/http"
 )
 
+// main expects one parameter on the command line: a valid website name.
+// This host is called using https, and returns OK and that status if the status is 200, or
+// Critical and the status if it's anything else.
 func main() {
 	url := "https://" + os.Args[1];
 	resp, err := http.Get(url)
