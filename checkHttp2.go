@@ -1,4 +1,15 @@
+/*
+A simple test for web server status. This package is intended for use with Nagios.
+*/
 package main
+
+import (
+	"os"
+	"net/http"
+	"fmt"
+)
+
+*/
 
 import (
 	"fmt"
