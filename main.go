@@ -11,6 +11,7 @@ import (
 	"strings"
 	"github.com/pkg/errors"
 	"time"
+	"strconv"
 )
 
 type NagiosStatusVal int
@@ -105,15 +106,9 @@ func main() {
 	oneByte := make([]byte,1)
 	_, err = resp.Body.Read(oneByte)
 
-	if err != nil {
-		Critical(err)
-	}
-
-	firstByte := time.Since(start)
 
 	if err != nil {
 		Critical(err)
-
 	} else {
 		if resp.StatusCode == 503 {
 			msg := *hostPtr + " " + resp.Proto + " " + resp.Status
@@ -124,7 +119,7 @@ func main() {
 			err = errors.New(msg)
 			Critical(err)
 		} else {
-			msg := *hostPtr + " responded with " + resp.Proto + " " + resp.Status + " in " + firstByte.String()
+			msg := *hostPtr + " responded with " + resp.Proto + " " + resp.Status + " with TTFB of " + strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64) + "s"
 			Ok(msg)
 		}
 	}
