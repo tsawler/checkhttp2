@@ -1,6 +1,4 @@
-/*
-A simple test for web server status. This package is intended for use with Nagios.
-*/
+// A simple nagios plugin to test for HTTP/2 status and SSL expiration
 package main
 
 import (
@@ -14,9 +12,9 @@ import (
 	"strconv"
 	"checkhttp2/messages"
 	"checkhttp2/certificateutils"
-	"checkhttp2/sslscan"
 )
 
+// scanHost gets cert details from an internet host
 func scanHost(hostname string, certDetailsChannel chan certificateutils.CertificateDetails, errorsChannel chan error) {
 
 	res, err := certificateutils.GetCertificateDetails(hostname, 10)
@@ -24,6 +22,19 @@ func scanHost(hostname string, certDetailsChannel chan certificateutils.Certific
 		errorsChannel <- err
 	} else {
 		certDetailsChannel <- res
+	}
+}
+
+// updateSitesAndCounts keeps track of status/sites
+func updateSitesAndCounts(count map[string]int, sites map[string]bool, certDetails certificateutils.CertificateDetails) {
+	if _, ok := count[certDetails.SubjectName]; !ok {
+		count[certDetails.SubjectName] = 1
+	} else {
+		count[certDetails.SubjectName]++
+	}
+
+	if !sites[certDetails.Hostname] {
+		sites[certDetails.Hostname] = true
 	}
 }
 
@@ -100,18 +111,18 @@ func main() {
 
 				if certDetails.DaysUntilExpiration < 7 {
 					msg := certDetails.Hostname + " expiring in " + strconv.Itoa(certDetails.DaysUntilExpiration) + " days"
-					sslscan.UpdateSitesAndCounts(expiringSoonCount, expiringSoonSites, certDetails)
+					updateSitesAndCounts(expiringSoonCount, expiringSoonSites, certDetails)
 					err := errors.New(msg)
 					messages.Critical(err)
 				} else {
 					msg := certDetails.Hostname + " expiring in " + strconv.Itoa(certDetails.DaysUntilExpiration) + " days"
-					sslscan.UpdateSitesAndCounts(expiringSoonCount, expiringSoonSites, certDetails)
+					updateSitesAndCounts(expiringSoonCount, expiringSoonSites, certDetails)
 					messages.Warning(msg)
 				}
 
 			} else {
-				msg := certDetails.Hostname + " expiring in "  + strconv.Itoa(certDetails.DaysUntilExpiration) + " days"
-				sslscan.UpdateSitesAndCounts(expiringSoonCount, expiringSoonSites, certDetails)
+				msg := certDetails.Hostname + " expiring in " + strconv.Itoa(certDetails.DaysUntilExpiration) + " days"
+				updateSitesAndCounts(expiringSoonCount, expiringSoonSites, certDetails)
 				messages.Ok(msg)
 			}
 

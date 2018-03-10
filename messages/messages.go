@@ -1,6 +1,4 @@
-/*
-Generate messages to send to Nagios
-*/
+//Generate messages to send to Nagios
 package messages
 
 import (
