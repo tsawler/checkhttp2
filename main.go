@@ -18,8 +18,6 @@ import (
 // main expects 1 - 3 flags: -host <somehost.com> [-protocol http|https] [-port 80|443|xxx]
 func main() {
 
-	start := time.Now()
-
 	hostPtr := flag.String("host", "unset", "A valid internet site without http:// or https://")
 	protocolPtr := flag.String("protocol", "https", "Protocol - either https or http")
 	portPtr := flag.String("port", "443", "Port number - default 443")
@@ -40,10 +38,9 @@ func main() {
 	// build url
 	url := *protocolPtr + "://" + *hostPtr + ":" + *portPtr
 
-	// call url
+	// call url & measure TTFB
+	start := time.Now()
 	resp, err := http.Get(url)
-
-	// measure TTFB
 	defer resp.Body.Close()
 
 	oneByte := make([]byte, 1)
