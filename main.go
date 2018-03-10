@@ -25,19 +25,6 @@ func scanHost(hostname string, certDetailsChannel chan certificateutils.Certific
 	}
 }
 
-// updateSitesAndCounts keeps track of status/sites
-func updateSitesAndCounts(count map[string]int, sites map[string]bool, certDetails certificateutils.CertificateDetails) {
-	if _, ok := count[certDetails.SubjectName]; !ok {
-		count[certDetails.SubjectName] = 1
-	} else {
-		count[certDetails.SubjectName]++
-	}
-
-	if !sites[certDetails.Hostname] {
-		sites[certDetails.Hostname] = true
-	}
-}
-
 // main expects 1-4 flags: -host <somehost.com> [-protocol http|https] [-port 80|443|xxx] [-cert true|false (default)\
 func main() {
 
@@ -96,8 +83,6 @@ func main() {
 		// scanning ssl cert for expiry date
 		var certDetailsChannel chan certificateutils.CertificateDetails
 		var errorsChannel chan error
-		expiringSoonCount := make(map[string]int)
-		expiringSoonSites := make(map[string]bool)
 		certDetailsChannel = make(chan certificateutils.CertificateDetails, 1)
 		errorsChannel = make(chan error, 1)
 
@@ -111,18 +96,15 @@ func main() {
 
 				if certDetails.DaysUntilExpiration < 7 {
 					msg := certDetails.Hostname + " expiring in " + strconv.Itoa(certDetails.DaysUntilExpiration) + " days"
-					updateSitesAndCounts(expiringSoonCount, expiringSoonSites, certDetails)
 					err := errors.New(msg)
 					messages.Critical(err)
 				} else {
 					msg := certDetails.Hostname + " expiring in " + strconv.Itoa(certDetails.DaysUntilExpiration) + " days"
-					updateSitesAndCounts(expiringSoonCount, expiringSoonSites, certDetails)
 					messages.Warning(msg)
 				}
 
 			} else {
 				msg := certDetails.Hostname + " expiring in " + strconv.Itoa(certDetails.DaysUntilExpiration) + " days"
-				updateSitesAndCounts(expiringSoonCount, expiringSoonSites, certDetails)
 				messages.Ok(msg)
 			}
 
