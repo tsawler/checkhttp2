@@ -24,7 +24,6 @@ var (
 	}
 )
 
-
 type NagiosStatus struct {
 	Message string
 	Value   NagiosStatusVal
