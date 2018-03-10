@@ -13,14 +13,27 @@ import (
 	"time"
 	"strconv"
 	"checkhttp2/messages"
+	"checkhttp2/certificateutils"
+	"checkhttp2/sslscan"
 )
 
-// main expects 1 - 3 flags: -host <somehost.com> [-protocol http|https] [-port 80|443|xxx]
+func scanHost(hostname string, certDetailsChannel chan certificateutils.CertificateDetails, errorsChannel chan error) {
+
+	res, err := certificateutils.GetCertificateDetails(hostname, 10)
+	if err != nil {
+		errorsChannel <- err
+	} else {
+		certDetailsChannel <- res
+	}
+}
+
+// main expects 1-4 flags: -host <somehost.com> [-protocol http|https] [-port 80|443|xxx] [-cert true|false (default)\
 func main() {
 
 	hostPtr := flag.String("host", "unset", "A valid internet site without http:// or https://")
 	protocolPtr := flag.String("protocol", "https", "Protocol - either https or http")
 	portPtr := flag.String("port", "443", "Port number - default 443")
+	certPtr := flag.String("cert", "false", "Scan SSL Cert - default false")
 
 	flag.Parse()
 
@@ -35,32 +48,81 @@ func main() {
 		messages.Critical(err)
 	}
 
-	// build url
-	url := *protocolPtr + "://" + *hostPtr + ":" + *portPtr
+	scancert := false
+	scancert, _ = strconv.ParseBool(*certPtr)
 
-	// call url & measure TTFB
-	start := time.Now()
-	resp, err := http.Get(url)
-	defer resp.Body.Close()
+	if scancert == false {
 
-	oneByte := make([]byte, 1)
-	_, err = resp.Body.Read(oneByte)
+		// build url
+		url := *protocolPtr + "://" + *hostPtr + ":" + *portPtr
 
-	if err != nil {
-		messages.Critical(err)
-	} else {
-		if resp.StatusCode == 503 {
-			msg := *hostPtr + " " + resp.Proto + " " + resp.Status
-			messages.Warning(msg)
-		}
-		if resp.StatusCode != 200 {
-			msg := *hostPtr + " " + resp.Proto + " " + resp.Status
-			err = errors.New(msg)
+		// call url & measure TTFB
+		start := time.Now()
+		resp, err := http.Get(url)
+		defer resp.Body.Close()
+
+		oneByte := make([]byte, 1)
+		_, err = resp.Body.Read(oneByte)
+
+		if err != nil {
 			messages.Critical(err)
 		} else {
-			elapsed := strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64)
-			msg := *hostPtr + " responded with " + resp.Proto + " " + resp.Status + " with TTFB of " + elapsed + "s"
-			messages.Ok(msg)
+			if resp.StatusCode == 503 {
+				msg := *hostPtr + " " + resp.Proto + " " + resp.Status
+				messages.Warning(msg)
+			}
+			if resp.StatusCode != 200 {
+				msg := *hostPtr + " " + resp.Proto + " " + resp.Status
+				err = errors.New(msg)
+				messages.Critical(err)
+			} else {
+				elapsed := strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64)
+				msg := *hostPtr + " responded with " + resp.Proto + " " + resp.Status + " with TTFB of " + elapsed + "s"
+				messages.Ok(msg)
+			}
+		}
+	} else {
+		// scanning ssl cert for expiry date
+		var certDetailsChannel chan certificateutils.CertificateDetails
+		var errorsChannel chan error
+		expiringSoonCount := make(map[string]int)
+		expiringSoonSites := make(map[string]bool)
+		certDetailsChannel = make(chan certificateutils.CertificateDetails, 1)
+		errorsChannel = make(chan error, 1)
+
+		scanHost(*hostPtr, certDetailsChannel, errorsChannel)
+
+		for i, certDetailsInQueue := 0, len(certDetailsChannel); i < certDetailsInQueue; i++ {
+			certDetails := <-certDetailsChannel
+			certificateutils.CheckExpirationStatus(&certDetails, 30)
+
+			if certDetails.ExpiringSoon {
+
+				if certDetails.DaysUntilExpiration < 7 {
+					msg := certDetails.Hostname + " expiring in " + strconv.Itoa(certDetails.DaysUntilExpiration) + " days"
+					sslscan.UpdateSitesAndCounts(expiringSoonCount, expiringSoonSites, certDetails)
+					err := errors.New(msg)
+					messages.Critical(err)
+				} else {
+					msg := certDetails.Hostname + " expiring in " + strconv.Itoa(certDetails.DaysUntilExpiration) + " days"
+					sslscan.UpdateSitesAndCounts(expiringSoonCount, expiringSoonSites, certDetails)
+					messages.Warning(msg)
+				}
+
+			} else {
+				msg := certDetails.Hostname + " expiring in "  + strconv.Itoa(certDetails.DaysUntilExpiration) + " days"
+				sslscan.UpdateSitesAndCounts(expiringSoonCount, expiringSoonSites, certDetails)
+				messages.Ok(msg)
+			}
+
+		}
+
+		if len(errorsChannel) > 0 {
+			fmt.Printf("There were %d error(s):\n", len(errorsChannel))
+			for i, errorsInChannel := 0, len(errorsChannel); i < errorsInChannel; i++ {
+				fmt.Printf("%s\n", <-errorsChannel)
+			}
+			fmt.Printf("\n")
 		}
 	}
 
