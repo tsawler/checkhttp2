@@ -2,7 +2,7 @@
 
 A simple plugin to check https urls, including http/2, and SSL expiration.
 
-This pluig is meant to be used with [Nagios](https://www.nagios.org/).
+This plugin is meant to be used with [Nagios](https://www.nagios.org/).
 
 The SSL check code is based on [asyncrsc/ssl_scan](https://github.com/asyncsrc/ssl_scan).
 Nagios messaging is based on [newrelic/go_nagios](https://github.com/newrelic/go_nagios).
