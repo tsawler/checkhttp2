@@ -30,16 +30,6 @@ type NagiosStatus struct {
 	Value   NagiosStatusVal
 }
 
-func (status *NagiosStatus) Aggregate(otherStatuses []*NagiosStatus) {
-	for _, s := range otherStatuses {
-		if status.Value < s.Value {
-			status.Value = s.Value
-		}
-
-		status.Message += " - " + s.Message
-	}
-}
-
 // Exit with an UNKNOWN status and appropriate message
 func Unknown(output string) {
 	ExitWithStatus(&NagiosStatus{output, NAGIOS_UNKNOWN})
