@@ -24,7 +24,6 @@ var (
 	}
 )
 
-// Find the highest value and combine all the messages. Things win in the order of highest to lowest.
 type NagiosStatus struct {
 	Message string
 	Value   NagiosStatusVal
