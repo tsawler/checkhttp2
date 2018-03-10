@@ -38,8 +38,6 @@ func TestNagiosStatus_Aggregate(t *testing.T) {
 	})
 }
 
-
-
 func TestValMessages(t *testing.T) {
 	Convey("Maps the correct strings to values", t, func() {
 		So(valMessages[NAGIOS_UNKNOWN], ShouldEqual, "UNKNOWN:")
