@@ -23,9 +23,27 @@ just place in `/usr/local/nagios/libexec`, and make sure the file is executable.
 Run the command from cli as follows:
 
 ~~~
-checkhttp2 -host <hostname.com> -protocol [<http:// or https:// (default)>] [-port 80|443 (default)|xxx ] [-cert true|false (default)]
+checkhttp2 -host <hostname.com> [-protocol http:https (default)] [-port 80|443 (default)|xxx ] [-cert true|false (default)]
 ~~~
 
+Example: to check status of www.google.com:
+
+~~~
+checkhttp2 -host www.google.com
+~~~
+
+Example: to check SSL expiration date for www.google.com:
+
+~~~
+checkhttp2 -host www.google.com -cert true
+~~~
+
+
+Example: to check SSL expiration of somesite.com on port 5666:
+
+~~~
+checkhttp2 -host www.somesite.com -port 5666
+~~~
 
 ## Integration with Nagios 4
 
