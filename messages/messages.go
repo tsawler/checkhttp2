@@ -29,8 +29,6 @@ type NagiosStatus struct {
 	Value   NagiosStatusVal
 }
 
-
-
 // Take a bunch of NagiosStatus pointers and find the highest value, then
 // combine all the messages. Things win in the order of highest to lowest.
 func (status *NagiosStatus) Aggregate(otherStatuses []*NagiosStatus) {
@@ -42,7 +40,6 @@ func (status *NagiosStatus) Aggregate(otherStatuses []*NagiosStatus) {
 		status.Message += " - " + s.Message
 	}
 }
-
 
 // Exit with an UNKNOWN status and appropriate message
 func Unknown(output string) {

@@ -1,16 +1,16 @@
 package certificateutils
 
 import (
+	"bytes"
 	"crypto/tls"
+	"crypto/x509"
+	"encoding/pem"
+	"errors"
 	"fmt"
+	"io/ioutil"
 	"net"
 	"strings"
 	"time"
-	"errors"
-	"bytes"
-	"io/ioutil"
-	"crypto/x509"
-	"encoding/pem"
 )
 
 var (

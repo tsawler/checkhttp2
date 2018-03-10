@@ -2,6 +2,7 @@ package messages
 
 import (
 	"testing"
+
 	. "github.com/smartystreets/goconvey/convey"
 )
 
