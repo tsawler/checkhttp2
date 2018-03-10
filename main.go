@@ -34,6 +34,12 @@ func main() {
 		os.Exit(0)
 	}
 
+	if strings.Compare(*protocolPtr, "http") == 0 && strings.Compare(*portPtr, "443") == 0 {
+		msg := "Protocol http specified, but port 443 chosen as default. Did you forget -port 80?"
+		err := errors.New(msg)
+		messages.Critical(err)
+	}
+
 	// build url
 	url := *protocolPtr + "://" + *hostPtr + ":" + *portPtr
 
