@@ -15,9 +15,6 @@ import (
 	"checkhttp2/messages"
 )
 
-
-
-
 // main expects 1 - 3 flags: -host <somehost.com> [-protocol http|https] [-port 80|443|xxx]
 func main() {
 
