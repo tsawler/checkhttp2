@@ -50,7 +50,7 @@ func main() {
 	scancert, _ = strconv.ParseBool(*certPtr)
 
 	if scancert == false {
-
+		// checking http/http2 connectivity and TTFB
 		// build url
 		url := *protocolPtr + "://" + *hostPtr + ":" + *portPtr
 
