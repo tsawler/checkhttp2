@@ -12,7 +12,7 @@ import (
 	"github.com/pkg/errors"
 	"time"
 	"strconv"
-	"github.com/tsawler/checkhttp2/messages"
+	"checkhttp2/messages"
 )
 
 
