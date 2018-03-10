@@ -1,6 +1,6 @@
 # checkhttp2
 
-A simple plugin to check https urls, including http/2.
+A simple plugin to check https urls, including http/2, and SSL expiration.
 
 Used with [Nagios](https://www.nagios.org/).
 
@@ -13,12 +13,11 @@ these instructions](https://www.digitalocean.com/community/tutorials/how-to-inst
 just place in `/usr/local/nagios/libexec`, and make sure the file is executable.
 
 ~~~
-checkhttp2 -host <hostname.com> -protocol [<http:// or https:// (default)>] [-port 80|443 (default)|xxx ]
+checkhttp2 -host <hostname.com> -protocol [<http:// or https:// (default)>] [-port 80|443 (default)|xxx ] [-cert true|false (default)]
 ~~~
 
 
-
-Add this to `/usr/local/nagios/objects/commands.cfg`:
+Add this to `/usr/local/nagios/objects/commands.cfg` to test *HTTP/2 status*:
 
 ~~~
 define command {
@@ -26,6 +25,17 @@ define command {
    command_line    /usr/local/nagios/libexec/checkhttp2 -host $ARG1$
 }
 ~~~
+
+
+Add this to `/usr/local/nagios/objects/commands.cfg` to test *SSL expiration status*:
+
+~~~
+define command {
+   command_name    check_ssl_expiry
+   command_line    /usr/local/nagios/libexec/checkhttp2 -host $ARG1$ -cert true
+}
+~~~
+
 
 In individual files in `/usr/local/nagios/etc/servers`:
 
@@ -35,5 +45,12 @@ define service{
         host_name               www.somesite.com
         service_description     Check HTTP2
         check_command           check_http2!www.somesite.com
+}
+
+define service{
+        use                     generic-service
+        host_name               www.somesite.com
+        service_description     Check SSL Expiry
+        check_command           check_ssl_exiry!www.somesite.com
 }
 ~~~
