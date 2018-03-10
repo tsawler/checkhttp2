@@ -87,3 +87,8 @@ define service{
         check_command           check_ssl_exiry!www.somesite.com
 }
 ~~~
+
+
+## License
+
+This software is licensed under the MIT License.
