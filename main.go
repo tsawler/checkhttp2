@@ -61,7 +61,8 @@ func main() {
 			err = errors.New(msg)
 			messages.Critical(err)
 		} else {
-			msg := *hostPtr + " responded with " + resp.Proto + " " + resp.Status + " with TTFB of " + strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64) + "s"
+			elapsed := strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64)
+			msg := *hostPtr + " responded with " + resp.Proto + " " + resp.Status + " with TTFB of " + elapsed + "s"
 			messages.Ok(msg)
 		}
 	}
