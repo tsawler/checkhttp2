@@ -1,19 +1,19 @@
 package certificateutils
 
 import (
-	"crypto/x509"
 	"crypto/rand"
-	"math/big"
-	"time"
-	"crypto/x509/pkix"
 	"crypto/rsa"
-	"encoding/pem"
 	"crypto/tls"
-	"net/http/httptest"
-	"net/http"
-	"net"
-	"testing"
+	"crypto/x509"
+	"crypto/x509/pkix"
+	"encoding/pem"
 	"fmt"
+	"math/big"
+	"net"
+	"net/http"
+	"net/http/httptest"
+	"testing"
+	"time"
 )
 
 func genSelfSignedCert(notBeforeDate time.Time, expirationDays int) (tls.Certificate, error) {
