@@ -1,3 +1,4 @@
+// based on https://github.com/newrelic/go_nagios
 package certificateutils
 
 import (
@@ -93,7 +94,7 @@ func ReadCertificateDetailsFromFile(publicCertFile, privateCertFile string) ([]C
 		daysUntilExpiration := int(cert.NotAfter.Sub(currentTime).Hours() / 24)
 		subjectName := cert.Subject.Names[len(cert.Subject.Names)-1].Value.(string)
 		issuerName := cert.Issuer.Names[len(cert.Issuer.Names)-1].Value.(string)
-		serialNumber := cert.SerialNumber.Text(16);
+		serialNumber := cert.SerialNumber.Text(16)
 		elapsed := time.Since(currentTime)
 
 		certDetails = append(certDetails, CertificateDetails{
@@ -149,7 +150,7 @@ func GetCertificateDetails(hostname string, connectionTimeout int) (CertificateD
 		daysUntilExpiration := int(cert.NotAfter.Sub(currentTime).Hours() / 24)
 		subjectName := cert.Subject.Names[len(cert.Subject.Names)-1].Value.(string)
 		issuerName := cert.Issuer.Names[len(cert.Issuer.Names)-1].Value.(string)
-		serialNumber := cert.SerialNumber.Text(16);
+		serialNumber := cert.SerialNumber.Text(16)
 		elapsed := time.Since(currentTime)
 
 		certDetails = CertificateDetails{

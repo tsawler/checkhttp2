@@ -10,8 +10,8 @@ func TestNagiosStatus_Aggregate(t *testing.T) {
 	Convey("Check statuses", t, func() {
 
 		otherStatuses := []*NagiosStatus{
-			&NagiosStatus{"ok", NAGIOS_OK},
-			&NagiosStatus{"Not so bad", NAGIOS_WARNING},
+			{"ok", NAGIOS_OK},
+			{"Not so bad", NAGIOS_WARNING},
 		}
 
 		Convey("Picks the worst status", func() {

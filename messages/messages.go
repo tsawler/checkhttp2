@@ -1,4 +1,4 @@
-//Generate messages to send to Nagios
+//Generate messages to send to Nagios. Based on https://github.com/asyncsrc/ssl_scan
 package messages
 
 import (
