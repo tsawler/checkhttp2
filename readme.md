@@ -29,7 +29,7 @@ Usage of /usr/local/nagios/libexec/checkhttp2:
   -cert
     	If set, perform scan SSL cert only
   -host string
-    	A valid internet site (without http:// or https://) (default "unset")
+    	A valid internet host e.g. www.example.com
   -port string
     	Port number (default "443")
   -protocol string
