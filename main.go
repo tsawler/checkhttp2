@@ -31,7 +31,7 @@ func main() {
 
 	hostPtr := flag.String("host", "", "A valid internet site e.g. www.example.com")
 	protocolPtr := flag.String("protocol", "https", "Protocol - https or http")
-	portPtr := flag.String("port", "443", "Port number")
+	portPtr := flag.Int("port", 443, "Port number")
 	certPtr := flag.Bool("cert", false, "If set, perform scan SSL cert only")
 
 	flag.Parse()
@@ -41,7 +41,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	if strings.Compare(*protocolPtr, "http") == 0 && strings.Compare(*portPtr, "443") == 0 {
+	if strings.Compare(*protocolPtr, "http") == 0 && *portPtr == 443 {
 		msg := "Protocol http specified, but port 443 chosen as default. Did you forget -port 80?"
 		err := errors.New(msg)
 		messages.Critical(err)
@@ -49,7 +49,7 @@ func main() {
 
 	if *certPtr == false {
 		// checking http/http2 connectivity and TTFB
-		url := *protocolPtr + "://" + *hostPtr + ":" + *portPtr
+		url := *protocolPtr + "://" + *hostPtr + ":" + strconv.Itoa(*portPtr)
 
 		// call url & measure TTFB
 		start := time.Now()
