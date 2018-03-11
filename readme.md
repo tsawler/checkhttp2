@@ -111,4 +111,4 @@ Nagios messaging is based on [newrelic/go_nagios](https://github.com/newrelic/go
 
 ## License
 
-This software is licensed under the MIT License.
+This software is licensed under the [MIT License](https://github.com/tsawler/checkhttp2/blob/master/LICENSE.md).
