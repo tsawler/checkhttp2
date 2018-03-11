@@ -44,7 +44,7 @@ Usage of /usr/local/nagios/libexec/checkhttp2:
 Run the command from cli as follows:
 
 ~~~
-checkhttp2 -host <hostname.com> [-protocol http:http] [-port 80|443] [-cert]
+checkhttp2 -host <hostname.com> [-protocol http|https] [-port 80|443] [-cert]
 ~~~
 
 Example: to check status of www.google.com:
