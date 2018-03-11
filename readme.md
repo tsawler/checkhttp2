@@ -4,10 +4,7 @@ A simple plugin to check https urls, including http/2, and SSL expiration.
 
 This plugin is meant to be used with [Nagios](https://www.nagios.org/).
 
-The SSL check code is based on [asyncrsc/ssl_scan](https://github.com/asyncsrc/ssl_scan).
-Nagios messaging is based on [newrelic/go_nagios](https://github.com/newrelic/go_nagios).
-
-Compile for Digital Ocean: 
+Compile for Linux (e.g. Digital Ocean Ubuntu 16.04): 
 
 ~~~
 env GOOS=linux GOARCH=amd64 go build -o checkhttp2 main.go
@@ -105,6 +102,11 @@ define service{
         check_command           check_ssl_exiry!www.somesite.com
 }
 ~~~
+
+## Credits
+
+The SSL check code is based on [asyncrsc/ssl_scan](https://github.com/asyncsrc/ssl_scan).
+Nagios messaging is based on [newrelic/go_nagios](https://github.com/newrelic/go_nagios).
 
 
 ## License
