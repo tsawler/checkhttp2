@@ -29,14 +29,14 @@ func scanHost(hostname string, certDetailsChannel chan certificateutils.Certific
 // main expects 1-4 flags: -host <somehost.com> [-protocol http|https] [-port 80|443] [-cert]
 func main() {
 
-	hostPtr := flag.String("host", "unset", "A valid internet site (without http:// or https://)")
+	hostPtr := flag.String("host", "", "A valid internet site (without http:// or https://)")
 	protocolPtr := flag.String("protocol", "https", "Protocol - https or http")
 	portPtr := flag.String("port", "443", "Port number")
 	certPtr := flag.Bool("cert", false, "If set, perform scan SSL cert only")
 
 	flag.Parse()
 
-	if strings.Compare(*hostPtr, "unset") == 0 {
+	if strings.Compare(*hostPtr, "") == 0 {
 		fmt.Println("Usage: checkhttp2 -host somehost.com [-protocol http|https] [-port 80|443] [-cert]")
 		os.Exit(0)
 	}
