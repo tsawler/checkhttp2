@@ -23,6 +23,24 @@ just place in `/usr/local/nagios/libexec`, and make sure the file is executable.
 
 ## Usage
 
+Help:
+
+~~~
+user@host# /usr/local/nagios/libexec/checkhttp2 -h
+
+Usage of /usr/local/nagios/libexec/checkhttp2:
+  -cert
+    	If set, perform scan SSL cert only
+  -host string
+    	A valid internet site (without http:// or https://) (default "unset")
+  -port string
+    	Port number (default "443")
+  -protocol string
+    	Protocol - https or http (default "https")
+~~~
+
+
+
 Run the command from cli as follows:
 
 ~~~
