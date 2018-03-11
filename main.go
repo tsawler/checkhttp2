@@ -2,6 +2,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"net/http"
@@ -12,8 +13,6 @@ import (
 
 	"checkhttp2/certificateutils"
 	"checkhttp2/messages"
-
-	"github.com/pkg/errors"
 )
 
 // scanHost gets cert details from an internet host
