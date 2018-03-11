@@ -1,3 +1,4 @@
+// based on https://github.com/newrelic/go_nagios
 package certificateutils
 
 import (
