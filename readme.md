@@ -100,6 +100,7 @@ define service{
         host_name               www.somesite.com
         service_description     Check SSL Expiry
         check_command           check_ssl_exiry!www.somesite.com
+        check_interval          1440
 }
 ~~~
 
