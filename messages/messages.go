@@ -1,4 +1,4 @@
-// based on https://github.com/newrelic/go_nagios
+// Based on https://github.com/newrelic/go_nagios
 package messages
 
 import (
