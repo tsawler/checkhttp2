@@ -1,4 +1,4 @@
-//Generate messages to send to Nagios. Based on https://github.com/asyncsrc/ssl_scan
+// based on https://github.com/newrelic/go_nagios
 package messages
 
 import (
