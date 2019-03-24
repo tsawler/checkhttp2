@@ -50,12 +50,13 @@ func (cd CertificateDetails) String() string {
 
 func insertNth(s string, n int) string {
 	var buffer bytes.Buffer
-	var n_1 = n - 1
-	var l_1 = len(s) - 1
+	var n1 = n - 1
+	var l1 = len(s) - 1
 	for i, r := range s {
 		buffer.WriteRune(r)
-		if i%n == n_1 && i != l_1 {
+		if i%n == n1 && i != l1 {
 			buffer.WriteRune('-')
+
 		}
 	}
 	return buffer.String()
@@ -76,7 +77,7 @@ func ReadCertificateDetailsFromFile(publicCertFile, privateCertFile string) ([]C
 		block, rest = pem.Decode(rest)
 
 		if block == nil {
-			return certDetails, errors.New("Certificate doesn't have a valid PEM block??")
+			return certDetails, errors.New("certificate doesn't have a valid PEM block")
 		}
 
 		blocks = append(blocks, block.Bytes...)
@@ -131,11 +132,11 @@ func GetCertificateDetails(hostname string, connectionTimeout int) (CertificateD
 		&tls.Config{InsecureSkipVerify: true})
 
 	if err != nil {
-		return CertificateDetails{}, fmt.Errorf("Connection error: %v", err)
+		return CertificateDetails{}, fmt.Errorf("connection error: %v", err)
 	}
 
 	if handshakeCompleted := conn.ConnectionState().HandshakeComplete; !handshakeCompleted {
-		return CertificateDetails{}, fmt.Errorf("TLS Handshake failed to hostname %s.", hostname)
+		return CertificateDetails{}, fmt.Errorf("the TLS Handshake failed to hostname %s", hostname)
 	}
 
 	defer conn.Close()
