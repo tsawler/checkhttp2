@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"checkhttp2/certificateutils"
-	"checkhttp2/messages"
+	"github.com/tsawler/checkhttp2/certificateutils"
+	"github.com/tsawler/checkhttp2/messages"
 )
 
 // scanHost gets cert details from an internet host
@@ -42,7 +42,7 @@ func main() {
 	}
 
 	if strings.Compare(*protocolPtr, "http") == 0 && *portPtr == 443 {
-		msg := "Protocol http specified, but port 443 chosen as default. Did you forget -port 80?"
+		msg := "protocol http specified, but port 443 chosen as default - ensure that -port is set"
 		err := errors.New(msg)
 		messages.Critical(err)
 	}
@@ -115,5 +115,4 @@ func main() {
 			fmt.Printf("\n")
 		}
 	}
-
 }
