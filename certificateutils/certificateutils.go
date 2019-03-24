@@ -1,4 +1,4 @@
-// Based on https://github.com/asyncsrc/ssl_scan
+// certificateutils is based on https://github.com/asyncsrc/ssl_scan
 package certificateutils
 
 import (
@@ -18,11 +18,13 @@ var (
 	hostnameEmptyError = errors.New("hostname empty")
 )
 
+// ResultError holds the result of certificate errors
 type ResultError struct {
 	Res CertificateDetails
 	Err error
 }
 
+// CertificateDetails holds info about a certificate
 type CertificateDetails struct {
 	DaysUntilExpiration int
 	IssuerName          string
@@ -36,6 +38,7 @@ type CertificateDetails struct {
 	Thumbprint          string
 }
 
+// String returns a formatted string response
 func (cd CertificateDetails) String() string {
 	return fmt.Sprintf(
 		"Subject Name: %s\nIssuer: %s\nExpiration date: %s\nDays Until Expiration: %d\nSerial #: %s\nRequest Time: %v\n",
@@ -48,6 +51,7 @@ func (cd CertificateDetails) String() string {
 	)
 }
 
+// insertNth
 func insertNth(s string, n int) string {
 	var buffer bytes.Buffer
 	var n1 = n - 1
@@ -62,6 +66,7 @@ func insertNth(s string, n int) string {
 	return buffer.String()
 }
 
+// ReadCertificateDetailsFromFile reads a cert from disk
 func ReadCertificateDetailsFromFile(publicCertFile, privateCertFile string) ([]CertificateDetails, error) {
 	currentTime := time.Now()
 	var certDetails []CertificateDetails
@@ -112,6 +117,7 @@ func ReadCertificateDetailsFromFile(publicCertFile, privateCertFile string) ([]C
 	return certDetails, nil
 }
 
+// GetCertificateDetails gets a certificate and its details
 func GetCertificateDetails(hostname string, connectionTimeout int) (CertificateDetails, error) {
 	currentTime := time.Now()
 	var certDetails CertificateDetails
@@ -169,6 +175,7 @@ func GetCertificateDetails(hostname string, connectionTimeout int) (CertificateD
 	return certDetails, nil
 }
 
+// CheckExpirationStatus checks the expiration info for a certificate
 func CheckExpirationStatus(cd *CertificateDetails, expirationDaysThreshold int) {
 	if cd.DaysUntilExpiration < 0 {
 		cd.Expired = true
