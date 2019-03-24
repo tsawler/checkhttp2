@@ -46,7 +46,7 @@ func genSelfSignedCert(notBeforeDate time.Time, expirationDays int) (tls.Certifi
 		ExtKeyUsage: []x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth},
 	}
 
-	derBytes, err := x509.CreateCertificate(
+	derBytes, _ := x509.CreateCertificate(
 		rand.Reader,
 		&certificateTemplate,
 		&certificateTemplate,
