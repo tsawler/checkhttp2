@@ -54,6 +54,9 @@ func main() {
 		// call url & measure TTFB
 		start := time.Now()
 		resp, err := http.Get(url)
+		if err != nil {
+			messages.Critical(err)
+		}
 		defer resp.Body.Close()
 
 		oneByte := make([]byte, 1)

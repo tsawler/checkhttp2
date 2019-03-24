@@ -1,4 +1,4 @@
-// Based on https://github.com/newrelic/go_nagios
+// messages is based on https://github.com/newrelic/go_nagios
 package messages
 
 import (
@@ -6,12 +6,17 @@ import (
 	"os"
 )
 
+// NagiosStatusVal holds the status value
 type NagiosStatusVal int
 
 const (
-	NAGIOS_OK       NagiosStatusVal = iota
+	// NAGIOS_OK is ok
+	NAGIOS_OK NagiosStatusVal = iota
+	// NAGIOS_WARNING - warning error
 	NAGIOS_WARNING
+	// NAGIOS_CRITICAL - critical error
 	NAGIOS_CRITICAL
+	// NAGIOS_UNKNOWN - unknown error
 	NAGIOS_UNKNOWN
 )
 
@@ -24,12 +29,13 @@ var (
 	}
 )
 
+// NagiosStatus holds the message value and string
 type NagiosStatus struct {
 	Message string
 	Value   NagiosStatusVal
 }
 
-// Take a bunch of NagiosStatus pointers and find the highest value, then
+// Aggregate takes a bunch of NagiosStatus pointers and finds the highest value, then
 // combine all the messages. Things win in the order of highest to lowest.
 func (status *NagiosStatus) Aggregate(otherStatuses []*NagiosStatus) {
 	for _, s := range otherStatuses {
@@ -41,27 +47,27 @@ func (status *NagiosStatus) Aggregate(otherStatuses []*NagiosStatus) {
 	}
 }
 
-// Exit with an UNKNOWN status and appropriate message
+// Unknown - Exit with an UNKNOWN status and appropriate message
 func Unknown(output string) {
 	ExitWithStatus(&NagiosStatus{output, NAGIOS_UNKNOWN})
 }
 
-// Exit with an CRITICAL status and appropriate message
+// Critical - Exit with an CRITICAL status and appropriate message
 func Critical(err error) {
 	ExitWithStatus(&NagiosStatus{err.Error(), NAGIOS_CRITICAL})
 }
 
-// Exit with an WARNING status and appropriate message
+// Warning - Exit with an WARNING status and appropriate message
 func Warning(output string) {
 	ExitWithStatus(&NagiosStatus{output, NAGIOS_WARNING})
 }
 
-// Exit with an OK status and appropriate message
+// Ok - Exit with an OK status and appropriate message
 func Ok(output string) {
 	ExitWithStatus(&NagiosStatus{output, NAGIOS_OK})
 }
 
-// Exit with a particular NagiosStatus
+// ExitWithStatus - Exit with a particular NagiosStatus
 func ExitWithStatus(status *NagiosStatus) {
 	fmt.Fprintln(os.Stdout, valMessages[status.Value], status.Message)
 	os.Exit(int(status.Value))
