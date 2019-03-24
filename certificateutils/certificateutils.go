@@ -1,4 +1,4 @@
-// certificateutils is based on https://github.com/asyncsrc/ssl_scan
+// Package certificateutils is based on https://github.com/asyncsrc/ssl_scan
 package certificateutils
 
 import (
