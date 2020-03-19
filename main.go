@@ -26,13 +26,14 @@ func scanHost(hostname string, certDetailsChannel chan certificateutils.Certific
 	}
 }
 
-// main expects 1-4 flags: -host <somehost.com> [-protocol http|https] [-port 80|443] [-cert]
+// main expects 1-5 flags: -host <somehost.com> [-protocol http|https] [-port 80|443] [-cert]
 func main() {
 
 	hostPtr := flag.String("host", "", "A valid internet site e.g. www.example.com")
 	protocolPtr := flag.String("protocol", "https", "Protocol - https or http")
 	portPtr := flag.Int("port", 443, "Port number")
 	certPtr := flag.Bool("cert", false, "If set, perform scan SSL cert only")
+	pagePtr := flag.String("page", "", "Specific page to scan")
 
 	flag.Parse()
 
@@ -49,7 +50,7 @@ func main() {
 
 	if *certPtr == false {
 		// checking http/http2 connectivity and TTFB
-		url := *protocolPtr + "://" + *hostPtr + ":" + strconv.Itoa(*portPtr)
+		url := fmt.Sprintf("%s://%s:%d%s", *protocolPtr, *hostPtr, *portPtr, *pagePtr)
 
 		// call url & measure TTFB
 		start := time.Now()
