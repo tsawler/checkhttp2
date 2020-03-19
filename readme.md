@@ -25,15 +25,18 @@ Help:
 ~~~
 user@host# /usr/local/nagios/libexec/checkhttp2 -h
 
-Usage of /usr/local/nagios/libexec/checkhttp2:
+Usage of ./checkhttp2:
   -cert
         If set, perform scan SSL cert only
   -host string
         A valid internet site e.g. www.example.com
+  -page string
+        Specific page to scan
   -port int
         Port number (default 443)
   -protocol string
         Protocol - https or http (default "https")
+
 ~~~
 
 
@@ -48,6 +51,12 @@ Example: to check status of www.google.com:
 
 ~~~
 checkhttp2 -host www.google.com
+~~~
+
+Example: to check a specific page:
+
+~~~
+./checkhttp2 -host powersports.wheelsanddeals.ca -page /atvs/brute-force-inventory -port 443 -protocol https
 ~~~
 
 Example: to check SSL expiration date for www.google.com:
