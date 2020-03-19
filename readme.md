@@ -127,7 +127,6 @@ define service{
         service_description     Check Page
         check_command           check_http2_page!powersports.wheelsanddeals.ca!/some/page
 }
-~
 ~~~
 
 ## Credits
