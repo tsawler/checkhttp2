@@ -56,7 +56,7 @@ checkhttp2 -host www.google.com
 Example: to check a specific page:
 
 ~~~
-./checkhttp2 -host powersports.wheelsanddeals.ca -page /atvs/brute-force-inventory -port 443 -protocol https
+./checkhttp2 -host www.somesite.com -page /some/specific/page -port 443 -protocol https
 ~~~
 
 Example: to check SSL expiration date for www.google.com:
@@ -80,6 +80,15 @@ Add this to `/usr/local/nagios/objects/commands.cfg` to test **HTTP/2 status**:
 define command {
    command_name    check_http2
    command_line    /usr/local/nagios/libexec/checkhttp2 -host $ARG1$
+}
+~~~
+
+Add this to `/usr/local/nagios/objects/commands.cfg` to test **a specfic page's HTTP/2 status**:
+
+~~~
+define command {
+   command_name    check_http2_page
+   command_line /usr/local/nagios/libexec/checkhttp2 -host $ARG1$ -page $ARG2$
 }
 ~~~
 
@@ -111,6 +120,14 @@ define service{
         check_command           check_ssl_exiry!www.somesite.com
         check_interval          1440
 }
+
+define service{
+        use                     generic-service
+        host_name               www.somesite.com
+        service_description     Check Page
+        check_command           check_http2_page!powersports.wheelsanddeals.ca!/some/page
+}
+~
 ~~~
 
 ## Credits
