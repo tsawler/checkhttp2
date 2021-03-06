@@ -1,5 +1,7 @@
 # checkhttp2
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/tsawler/checkhttp2.svg)](https://pkg.go.dev/github.com/tsawler/checkhttp2)
+
 A simple plugin to check https urls, including http/2, and SSL expiration.
 
 This plugin is meant to be used with [Nagios](https://www.nagios.org/).
