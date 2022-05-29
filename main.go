@@ -54,7 +54,13 @@ func main() {
 
 		// call url & measure TTFB
 		start := time.Now()
-		resp, err := http.Get(url)
+		client := &http.Client{}
+		req, err := http.NewRequest("GET", url, nil)
+		if err != nil {
+			messages.Critical(err)
+		}
+		req.Header.Add("User-Agent", "checkhttp2/2.0.7")
+		resp, err := client.Do(req)
 		if err != nil {
 			messages.Critical(err)
 		}
